@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Weather forecasting</title>
+<style>
+#container {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto;
+    
+}
+</style>
+</head>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<body>
+    <div class="global">
+    <div id="oneInch">
+      
+        
+    </div>
+<div id="container">
+
+    
+</div>
+</div>
+	<script type="text/javascript">
+		var d=new Date()
+		var chart = Highcharts.chart('container', {
+
+    title: {
+        text: 'Weather chart'
+    },
+
+    subtitle: {
+        text: 'Temp vs time graph'
+    },
+    xAxis: {type:'datetime'},
+
+    yAxis: {
+        title: {
+            text: 'weather'
+        }
+    },
+    legend: {
+		 align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+        series: {
+            cursor:'pointer',
+        point: {
+        events: {
+          click: function(oEvent) {
+            window.open("file:///C:/Users/SANDHYA/Desktop/each_day_weather_details.html")//call function  with arguments
+         
+          }
+        }
+      },
+            label: {
+                connectorAllowed: false
+            },
+             pointStart: Date.UTC(2018,d.getMonth(),d.getDate(),d.getHours(),d.getMinutes(),d.getSeconds()),
+        }
+    },
+
+    series: [{
+        name: 'temp_min',
+        data: []
+    }, {
+        name: 'temp_max',
+        data: []
+    }
+], 
+    
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+
+var Pressurechart = Highcharts.chart('oneInch', {
+
+title: {
+    text: 'Pressure  chart'
+},
+
+subtitle: {
+    text: 'pressure vs time graph'
+},
+xAxis: {type:'datetime'},
+
+yAxis: {
+    title: {
+        text: 'weather'
+    }
+},
+legend: {
+     align: 'right',
+    verticalAlign: 'middle'
+},
+
+plotOptions: {
+    series: {
+        cursor:'pointer',
+        point: {
+        events: {
+          click: function(oEvent) {
+            window.open("file:///C:/Users/SANDHYA/Desktop/each_day_weather_details.html")//call function  with arguments
+         
+          }
+        }
+      },
+        label: {
+            connectorAllowed: false
+        },
+         pointStart: Date.UTC(2018,d.getMonth(),d.getDate(),d.getHours(),d.getMinutes(),d.getSeconds()),
+    }
+},
+
+series: [
+    {
+    name: 'pressure',
+    data: []
+}
+],  
+
+responsive: {
+    rules: [{
+        condition: {
+            maxWidth: 500
+        },
+        chartOptions: {
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom'
+            }
+        }
+    }]
+}
+
+});
+		var pressureList=[];
+        var minTempList=[];
+        var maxTempList=[];
+        var humidity=[];
+       
+			var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200){
+            var weatherList=JSON.parse(xhttp.responseText)
+            console.log(weatherList.list[0]);
+            weather=weatherList;
+            for(let i=0;i<7;i++){
+           
+                pressureList[i]=weatherList.list[i].main.pressure;
+                minTempList[i]=weatherList.list[i].main.temp_min;
+                maxTempList[i]=weatherList.list[i].main.temp_max;
+                console.log(pressureList[i],minTempList[i],maxTempList[i]);
+                var j=minTempList[i];
+                var k=maxTempList[i];
+                var l=pressureList[i];
+                humidity[i]=weatherList.list[i].main.humidity;
+                chart.series[0].addPoint(j);
+                chart.series[1].addPoint(k);
+                Pressurechart.series[0].addPoint(l);
+                
+               
+            }
+
+
+
+//        while(i<7){
+//             console.log(weatherList.data.list[i].main.temp_min);
+//          chart.series[0].addPoint(weatherList.data.list[i].main.temp_min);
+// 		chart.series[1].addPoint(weatherList.data.list[i].main.temp_max);
+//         i++;
+// }
+
+   
+      
+
+
+
+
+	}
+}
+	xhttp.open("GET","http://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&APPID=14a1978fee62bdc4f3693314658d72ba",true);
+	xhttp.send();
+
+   
+
+   
+	
+</script>
+</body>
+</html>
